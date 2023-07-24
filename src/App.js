@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { themeSettings } from "theme";
+import Layout from "scenes/layout";
+import Login from "scenes/login";
+import Products from "scenes/products";
+import Transactions from "scenes/transactions";
+import ProtectedRoute from "state/ProtectedRoute";
+import Resetpasswordpromt from "scenes/resetpassword";
+import { AuthContextProvider } from "state/AuthContext";
+import Signin from "scenes/signin";
+import Userinfo from "scenes/userinfo";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const  mode = useSelector((state) => state.global.mode);
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
+
+  return <div className="app">
+    <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthContextProvider>
+        <Routes>
+          <Route path="/" element={<Signin />}/>
+          <Route path="/resetpassword" element={<Resetpasswordpromt />}/>
+          <Route element={<Layout />}>
+          <Route
+            path='/products'
+            element={
+              <ProtectedRoute>
+                <Products />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/transactions'
+            element={
+              <ProtectedRoute>
+                <Transactions />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path='/userinfo'
+            element={
+              <ProtectedRoute>
+                <Userinfo />
+              </ProtectedRoute>
+            }
+          />
+          </Route>
+        </Routes>
+      </AuthContextProvider>
+    </ThemeProvider>
+    </BrowserRouter>
+  </div>
 }
 
 export default App;
