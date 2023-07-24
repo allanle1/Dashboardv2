@@ -12,7 +12,6 @@ import ProtectedRoute from "state/ProtectedRoute";
 import Resetpasswordpromt from "scenes/resetpassword";
 import { AuthContextProvider } from "state/AuthContext";
 import Signin from "scenes/signin";
-import Userinfo from "scenes/userinfo";
 
 function App() {
   const  mode = useSelector((state) => state.global.mode);
@@ -41,14 +40,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <Transactions />
-              </ProtectedRoute>
-            }
-          />
-           <Route
-            path='/userinfo'
-            element={
-              <ProtectedRoute>
-                <Userinfo />
               </ProtectedRoute>
             }
           />
