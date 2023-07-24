@@ -23,111 +23,105 @@ import {
 import { signOut } from "firebase/auth";
 import { auth } from "firebase-config";
 
-const Navbar = ({
-    user, 
-    isSidebarOpen, 
-    setIsSidebarOpen 
-}) => {
-    const dispatch = useDispatch();
-    const theme = useTheme();
+const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
+  const dispatch = useDispatch();
+  const theme = useTheme();
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const isOpen = Boolean(anchorEl);
-    const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleClose = () => setAnchorEl(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isOpen = Boolean(anchorEl);
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
+  const [isAuth, setIsAuth] = useState(false);
 
-    const [isAuth, setIsAuth] = useState(false);
-    const signUserOut = () => {
-      signOut(auth).then(() => {
-        localStorage.clear()
-        setIsAuth(false);
-        window.location.pathname = "/"
-      })
-    };
+  console.log(user);
+  const signUserOut = () => {
+    signOut(auth).then(() => {
+      localStorage.clear();
+      setIsAuth(false);
+      window.location.pathname = "/";
+    });
+  };
 
-    return (
-        <AppBar
-          sx={{
-            position: "static",
-            background: "none",
-            boxShadow: "none",
-          }}
-        >
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-            {/* LEFT SIDE */}
-            <FlexBetween>
-              <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                <MenuIcon />
-              </IconButton>
-            </FlexBetween>
-        
-    
-            {/* RIGHT SIDE */}
-            <FlexBetween gap="1.5rem">
-              <IconButton onClick={() => dispatch(setMode())}>
-                {theme.palette.mode === "dark" ? (
-                  <DarkModeOutlined sx={{ fontSize: "25px" }} />
-                ) : (
-                  <LightModeOutlined sx={{ fontSize: "25px" }} />
-                )}
-              </IconButton>
-              <FlexBetween>
-                <Button 
-                onClick={handleClick} 
-                sx={{
-                  display:"flex", 
-                  justifyContent:"space-between", 
-                  alignItems:"center", 
-                  textTransform:"none", 
-                  gap:"1rem",
-                  }}
-                  >
+  return (
+    <AppBar
+      sx={{
+        position: "static",
+        background: "none",
+        boxShadow: "none",
+      }}
+    >
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* LEFT SIDE */}
+        <FlexBetween>
+          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <MenuIcon />
+          </IconButton>
+        </FlexBetween>
+
+        {/* RIGHT SIDE */}
+        <FlexBetween gap="1.5rem">
+          <IconButton onClick={() => dispatch(setMode())}>
+            {theme.palette.mode === "dark" ? (
+              <DarkModeOutlined sx={{ fontSize: "25px" }} />
+            ) : (
+              <LightModeOutlined sx={{ fontSize: "25px" }} />
+            )}
+          </IconButton>
+          <FlexBetween>
+            <Button
+              onClick={handleClick}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                textTransform: "none",
+                gap: "1rem",
+              }}
+            >
               <Box
-              component={"img"}
-              alt="profile"
-              src={profileImage}
-              height={"32px"}
-              width={"32px"}
-              borderRadius={"50%"}
-              sx={{objectFit:"cover"}}
+                component={"img"}
+                alt="profile"
+                src={profileImage}
+                height={"32px"}
+                width={"32px"}
+                borderRadius={"50%"}
+                sx={{ objectFit: "cover" }}
               />
               <Box textAlign={"left"}>
-                  <Typography 
-                  fontWeight={"bold"} 
-                  fontSize={"0.85rem"} 
-                  sx={{color: theme.palette.secondary[100]}}>
-                    Allan Le
-                  </Typography>
-                  <Typography 
-                  fontSize={"0.75rem"} 
-                  sx={{color: theme.palette.secondary[200]}}>
-                    Site Dev
-                  </Typography>
-                  </Box>
-                  <ArrowDropDownOutlined 
-                    sx={{color: theme.palette.secondary[300], fontSize:"25px"}}
-                  />
-                </Button>
-                <Menu 
-                  anchorEl={anchorEl} 
-                  open={isOpen} 
-                  onClose={handleClose} 
-                  anchorOrigin={{vertical:"bottom", horizontal:"center"}}
-                  >
-                    <MenuItem onClick={handleClose}>
-                      <Typography onClick={signUserOut}>
-                        Logout
-                      </Typography>
-                    </MenuItem>
-                </Menu>
-              </FlexBetween>
-
-            </FlexBetween>
-          </Toolbar>
-        </AppBar>
-      );
+                <Typography
+                  fontWeight={"bold"}
+                  fontSize={"0.85rem"}
+                  sx={{ color: theme.palette.secondary[100] }}
+                >
+                  {user?.fname}
+                </Typography>
+                <Typography
+                  fontSize={"0.75rem"}
+                  sx={{ color: theme.palette.secondary[200] }}
+                >
+                  {user?.lname}
+                </Typography>
+              </Box>
+              <ArrowDropDownOutlined
+                sx={{ color: theme.palette.secondary[300], fontSize: "25px" }}
+              />
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={isOpen}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Typography onClick={signUserOut}>Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </FlexBetween>
+        </FlexBetween>
+      </Toolbar>
+    </AppBar>
+  );
 };
-
 
 export default Navbar;

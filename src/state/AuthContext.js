@@ -6,7 +6,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
 } from 'firebase/auth';
-import { auth, db } from 'firebase-config';
+import { auth } from 'firebase-config';
+import { collection, doc, getFirestore, getDoc } from 'firebase/firestore';
 
 const UserContext = createContext();
 
@@ -31,10 +32,22 @@ export const AuthContextProvider = ({ children }) => {
   
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
-      console.log(currentUser);
-      setUser(currentUser);
+    const firestore = getFirestore();
+    const unsubscribe = onAuthStateChanged(auth, async(loggedInUser) => {
+        if (loggedInUser) {
+            // User is logged in, get their info based on their ID
+            const userRef = doc(collection(firestore, 'users'), loggedInUser.uid);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+                setUser(userDoc.data());
+                console.log(userDoc.data())
+            }
+        } else {
+            // User is logged out
+            setUser(null);
+        }
     });
+
     return () => {
       unsubscribe();
     };
