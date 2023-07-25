@@ -6,7 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { themeSettings } from "theme";
 import Layout from "scenes/layout";
 import Login from "scenes/login";
-import Products from "scenes/products";
+import Machine from "scenes/machine";
 import Transactions from "scenes/transactions";
 import ProtectedRoute from "state/ProtectedRoute";
 import Resetpasswordpromt from "scenes/resetpassword";
@@ -28,10 +28,10 @@ function App() {
           <Route path="/resetpassword" element={<Resetpasswordpromt />}/>
           <Route element={<Layout />}>
           <Route
-            path='/products'
+            path='/machine'
             element={
               <ProtectedRoute>
-                <Products />
+                <Machine />
               </ProtectedRoute>
             }
           />

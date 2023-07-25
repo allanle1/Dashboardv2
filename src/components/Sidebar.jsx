@@ -171,18 +171,18 @@ const Sidebar = ({
                   fontSize={"0.9rem"}
                   sx={{ color: theme.palette.secondary[100] }}
                 >
-                  {user?.fname}
+                  {user?.fname} {user?.lname}
                 </Typography>
                 <Typography
                   fontSize={"0.8rem"}
                   sx={{ color: theme.palette.secondary[200] }}
                 >
-                  {user?.lname}
+                  {user?.role}
                 </Typography>
               </Box>
-              <SettingsOutlined
+              {/* <SettingsOutlined
                 sx={{ color: theme.palette.secondary[300], fontSize: "25px" }}
-              />
+              /> */}
             </FlexBetween>
           </Box>
         </Drawer>
